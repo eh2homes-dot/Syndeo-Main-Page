@@ -43,6 +43,20 @@
   }
   @media (min-width: 900px){ body{ padding-left: 54px; } }
 
+  body::after{
+    content: '';
+    position: fixed;
+    inset: 0;
+    background:
+      repeating-linear-gradient(115deg, rgba(255,255,255,.05) 0px, rgba(255,255,255,.05) 1px, transparent 1px, transparent 60px),
+      repeating-linear-gradient(25deg, rgba(255,255,255,.04) 0px, rgba(255,255,255,.04) 1px, transparent 1px, transparent 80px),
+      linear-gradient(160deg, rgba(255,255,255,.10) 0%, transparent 40%, rgba(255,255,255,.06) 70%, transparent 100%),
+      radial-gradient(ellipse 55% 40% at 15% 15%, rgba(255,255,255,.14), transparent 60%),
+      radial-gradient(ellipse 45% 35% at 85% 75%, rgba(255,255,255,.10), transparent 60%);
+    pointer-events: none;
+    z-index: 70;
+  }
+
   a{ color:inherit; text-decoration:none; }
   button{ font: inherit; background: none; border: none; padding: 0; cursor: pointer; color: inherit; }
   ::selection{ background: var(--vermillion); color: var(--ink); }
@@ -327,7 +341,14 @@
 
   /* ---------- convenings: three invitations ---------- */
 
-  .ticket-row{ display:grid; grid-template-columns:1fr; gap: 22px; position:relative; z-index:1; }
+  .ticket-row{ display:grid; grid-template-columns:1fr; gap: 22px; position:relative; z-index:1; padding: 20px; }
+  .ticket-row::before{
+    content:'';
+    position: absolute; inset: -30px;
+    background: radial-gradient(ellipse 70% 60% at 50% 40%, rgba(126,154,103,.14), transparent 70%);
+    pointer-events: none;
+    z-index: -1;
+  }
   @media (min-width: 860px){ .ticket-row{ grid-template-columns: repeat(3, 1fr); } }
 
   .invite-link{ display:block; transition: transform .2s ease; }
@@ -480,7 +501,6 @@
 
   <!-- ================= ABOUT ================= -->
   <section id="about">
-    <span class="ghost-num">02</span>
     <div class="wrap">
       <div class="section-head reveal">
         <span class="label">About</span>
@@ -509,7 +529,6 @@
 
   <!-- ================= CONVENINGS ================= -->
   <section id="convenings">
-    <span class="ghost-num">03</span>
     <div class="wrap">
       <div class="section-head reveal">
         <span class="label">Convenings</span>
@@ -575,7 +594,6 @@
 
   <!-- ================= MEMBERSHIP / REQUEST ================= -->
   <section id="membership">
-    <span class="ghost-num">04</span>
     <div class="wrap">
       <div class="section-head reveal">
         <span class="label">Membership</span>
@@ -658,7 +676,7 @@
       </div>
     </div>
 
-    <p class="copyright">© <span id="year"></span> Syndeo LLC. Invite-only foundation for property, real estate, and technology leadership.</p>
+    <p class="copyright">© <span id="year"></span> <a href="https://syndeollc.pages.dev/" target="_blank" rel="noopener" style="color:inherit; text-decoration:underline;">Syndeo LLC</a>. Invite-only foundation for property, real estate, and technology leadership.</p>
   </div>
 </footer>
 
