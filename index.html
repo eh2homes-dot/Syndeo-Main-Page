@@ -12,7 +12,7 @@
 <meta name="description" content="Syndeo — an invite-only foundation for the CEOs, owners, and founders building companies across property, real estate, and technology.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=Pinyon+Script&family=Newsreader:ital,wght@0,400;0,500;1,400&family=Marcellus&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;0,700;0,800;1,600;1,700&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=Newsreader:ital,wght@0,400;0,500;1,400&family=Marcellus&display=swap" rel="stylesheet">
 <style>
 
   :root{
@@ -24,7 +24,7 @@
     --gold: #7E9A67;
     --rule: #24392C;
 
-    --display: 'Fraunces', serif;
+    --display: 'EB Garamond', serif;
     --body: 'Newsreader', serif;
     --mono: 'Marcellus', serif;
     --wordmark: 'Fraunces', serif;
@@ -69,7 +69,7 @@
 
   .wrap{ max-width: 1180px; margin:0 auto; padding: 0 40px; }
 
-  h1,h2,h3{ font-family: var(--display); font-weight:400; letter-spacing: -0.01em; color: var(--ink); }
+  h1,h2,h3{ font-family: var(--display); font-weight:700; letter-spacing: -0.01em; color: var(--ink); }
 
   .label{
     font-family: var(--mono); font-size: 11px; letter-spacing:.14em; text-transform:uppercase; color: var(--ink-soft);
@@ -172,7 +172,7 @@
     color: #F2EEE0; margin-bottom: 12px;
     position: relative; z-index: 1;
   }
-  .invite h3{ font-size: 27px; line-height:1.05; font-weight: 350; letter-spacing: 0; color: #F2EEE0; margin-bottom: 10px; position: relative; z-index: 1; }
+  .invite h3{ font-size: 27px; line-height:1.05; font-weight: 700; letter-spacing: 0; color: #F2EEE0; margin-bottom: 10px; position: relative; z-index: 1; }
   .invite p{ font-size: 13px; color: rgba(242,238,224,.65); line-height:1.65; position: relative; z-index: 1; }
   .invite-tag{
     display:inline-block; margin-top: 16px;
@@ -260,7 +260,7 @@
   h1.headline{
     font-size: clamp(42px, 6.6vw, 80px);
     line-height: 1.08;
-    font-weight: 400;
+    font-weight: 700;
     letter-spacing: -0.01em;
     margin: 0 auto;
   }
@@ -720,14 +720,50 @@
   revealEls.forEach(el => io.observe(el));
 
   const form = document.getElementById('request');
+
+  // Paste the Web App URL from your Google Apps Script deployment here.
+  // See syndeo-apps-script.gs for setup steps.
+  const REQUEST_ENDPOINT = 'PASTE_YOUR_APPS_SCRIPT_URL_HERE';
+
   form.addEventListener('submit', function(e){
     e.preventDefault();
     const btn = form.querySelector('button[type="submit"]');
     const original = btn.textContent;
-    btn.textContent = 'Request Received';
-    setTimeout(() => { btn.textContent = original; }, 3200);
+
+    const payload = {
+      fname: form.fname.value,
+      lname: form.lname.value,
+      email: form.email.value,
+      company: form.company.value,
+      title: form.title.value,
+      vouch: form.vouch.value,
+      note: form.note.value
+    };
+
+    btn.textContent = 'Sending…';
+    btn.disabled = true;
+
+    fetch(REQUEST_ENDPOINT, {
+      method: 'POST',
+      mode: 'no-cors', // Apps Script web apps don't return readable CORS headers;
+                        // no-cors still delivers the request, we just can't read the response.
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: JSON.stringify(payload)
+    })
+      .then(() => {
+        btn.textContent = 'Request Received';
+        form.reset();
+      })
+      .catch(() => {
+        btn.textContent = 'Something went wrong — try again';
+      })
+      .finally(() => {
+        btn.disabled = false;
+        setTimeout(() => { btn.textContent = original; }, 3600);
+      });
   });
 </script>
+
 
 </body>
 </html>
